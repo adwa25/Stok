@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin | Tambah Stok Akun - ADWA Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+    form { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); max-width: 500px; margin: auto; }
+    form input, form select, form button { width: 100%; padding: 10px; margin-bottom: 10px; }
+    form button { background: #28a745; color: white; border: none; cursor: pointer; }
+    h1 { text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>Tambah Akun Game (Admin)</h1>
+  <form id="form-akun">
+    <select id="game">
+      <option value="ml">Mobile Legends</option>
+      <option value="ff">Free Fire</option>
+    </select>
+    <input type="text" id="nama" placeholder="Nama Akun" required />
+    <input type="text" id="deskripsi" placeholder="Deskripsi" required />
+    <input type="text" id="harga" placeholder="Harga" required />
+    <input type="text" id="gambar" placeholder="URL Gambar" required />
+    <button type="submit">Tambah</button>
+  </form>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDiDqWYSwk-SOJPjBuhQhPnM2xUI4KpI24",
+      authDomain: "stok-sukun.firebaseapp.com",
+      projectId: "stok-sukun",
+      storageBucket: "stok-sukun.firebasestorage.app",
+      messagingSenderId: "583494362711",
+      appId: "1:583494362711:web:3a71f5709bf3e00277e512",
+      measurementId: "G-HT7276XRBG",
+      databaseURL: "https://stok-sukun-default-rtdb.asia-southeast1.firebasedatabase.app"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    document.getElementById("form-akun").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const game = document.getElementById("game").value;
+      const nama = document.getElementById("nama").value;
+      const desc = document.getElementById("deskripsi").value;
+      const harga = document.getElementById("harga").value;
+      const gambar = document.getElementById("gambar").value;
+      const link = `https://wa.me/6288267074566?text=Saya%20minat%20akun%20${encodeURIComponent(nama)}`;
+
+      const akunBaru = { nama, desc, harga, gambar, link };
+
+      await push(ref(db, game), akunBaru);
+      alert("✅ Akun berhasil ditambahkan ke stok!");
+      this.reset();
+    });
+  </script>
+</body>
+</html>
